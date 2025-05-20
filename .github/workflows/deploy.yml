@@ -2,26 +2,25 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: ["main"]  # Триггер: при пуше в ветку main
+    branches: ["main"]
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest  # Используем свежий Ubuntu
+    runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Забираем код из репозитория
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Шаг 2: Логинимся в Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      # Шаг 3: Собираем и пушим Docker-образ
-      - name: Build and push
+      - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-web-app:latest .
-          docker push ${{ secrets.DOCKER_HUB_TOKEN }}/my-web-app:latest
+          # Принудительно приводим к нижнему регистру
+          IMAGE_NAME=$(echo "${{ secrets.DOCKER_HUB_USERNAME }}/my-web-app:latest" | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
