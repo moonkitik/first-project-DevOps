@@ -23,5 +23,5 @@ jobs:
       # Шаг 3: Собираем и пушим Docker-образ
       - name: Build and push
         run: |
-          docker build -t ${{ secrets.moonkitik }}/my-web-app:latest .
+          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/my-web-app:latest .
           docker push ${{ secrets.DOCKER_HUB_TOKEN }}/my-web-app:latest
